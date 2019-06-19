@@ -1,0 +1,71 @@
+&CONTROL
+ title='TITLE'
+ calculation='CALCULATION'
+ restart_mode='MODE'
+ outdir='OUTDIR'
+ pseudo_dir='PSEUDODIR'
+ tstress=TSTRESS
+ tprnfor=TPRNFOR
+ verbosity='VERBOSE'
+ nstep=NSTEP
+ dt=TIMESTEP
+ ndr=NDR
+ ndw=NDW
+ iprint=IPRINT
+ isave=ISAVE
+ prefix=PREFIX
+ ekin_conv_thr=EKINCONVTHR
+ etot_conv_thr=ETOTCONVTHR
+ forc_conv_thr=FORCCONVTHR
+/
+
+&SYSTEM
+ ibrav=IBRAV
+ nat=NAT
+ ntyp=NTYP
+ nbnd=1
+ nspin=1
+ ecutwfc=ECUTWFC
+/
+
+&ELECTRONS
+ electron_dynamics='ELECTRONDYNAMICS'
+ electron_damping=ELECTRONDAMPING
+ electron_velocities='ELECTRONVELOCITY'
+ startingwfc='STARTINGWFC'
+ ampre=AMPRE
+ emass=EMASS
+ emass_cutoff=EMCUTOFF
+ ortho_max=ORTHOMAX
+ orthogonalization='ORTHOGONALIZATION'
+/
+
+&IONS
+ ion_dynamics='IONDYNAMICS'
+ ion_velocities='IONVELOCITY'
+ ion_damping=IONDAMPING
+ ion_radius(1)=1.0
+ tempw=TEMPW
+ fnosep=FNOSEP
+/
+
+ATOMIC_SPECIES
+ Mg   24.30500   Mg.pbe-mt_fhi.UPF
+ Ge   72.59000   Ge.pbe-mt_fhi.UPF
+ Si   28.08500   Si.pbe-mt_fhi.UPF
+
+ATOMIC_POSITIONS {crystal}
+Si      0.50000000000000   0.50000000000000   0.50000000000000
+Ge      0.00000000000000   0.00000000000000   0.00000000000000
+Mg      0.50000000000000   0.00000000000000   0.25000000000000
+Mg      0.00000000000000   0.50000000000000   0.25000000000000
+Mg      0.00000000000000   0.50000000000000   0.75000000000000
+Mg      0.50000000000000   0.00000000000000   0.75000000000000
+
+CELL_PARAMETERS {angstrom}
+  4.51841233178204   0.00000000000000   0.00000000000000
+  0.00000000000000   4.51841233178204   0.00000000000000
+  0.00000000000000   0.00000000000000   6.39000000000000
+
+K_POINTS {automatic}
+8 8 4 0 0 0
