@@ -9,10 +9,11 @@
 #####################################
 # Runs:
 #  1 - wavefunction optimization
-#  2 - restart wavefunction optimization
-#  3 - structural optimization
-#  4 - MD run
-RUNS=2
+#  2 - s.d. wavefunction optimization
+#  3 - propagate wavefunction
+#  4 - structural optimization
+#  5 - MD run
+RUNS=3
 
 #################
 # COMMON INPUTS #
@@ -97,7 +98,7 @@ then #  2 - restart with orthogonal method
   EMCUTOFF=3.0
   ORTHOMAX=100
   IONDYNAMICS='none'
-elif [ $RUN -eq 3 ];
+elif [ $RUNS -eq 3 ];
 then # 3 - propagate ground state wavefunction
   MODE='restart'
   ISAVE=10
