@@ -2,17 +2,46 @@
 # Bash version of Julen Larrucea's pw2cellvec https://larrucea.eu/src/pw2cellvec
 export LANG=en_US.UTF-8
 
-# Define Bohr constant and Pi
-PI=3.1415926535897932384
-AU=0.5291772083
-INPUT=$1
-
+#===================
+#   Flags
+#===================
 if [ -z ${INPUT} ]; then
   echo "pw2cellvec: Requires an input file."
   exit 1
 fi
 
-# Define function
+while [ $# -eq 0 ]
+do
+  case "$1" in
+    --help | -h)
+      printf '%s\n' "Requires input file from vc-relax of pw.x calculation." | fold -s
+      printf "Usage: sh pw2cellvec.sh [OPTION]...\n"
+      printf "\t --debug\n"
+      printf "\t\t\t Run in debug mode"
+      printf "\t --position\n"
+      printf "\t\t\t Print atomic positions"
+      exit
+      ;;
+    --position )
+      PRINT_POSITION=true
+      ;;
+    --debug )
+      DEBUG=true
+    esac
+    shift
+done
+
+PRINT_POSITION="${PRINT_POSITION:-false}"
+DEBUG="${DEBUG:-false}"
+
+#===================
+#   Math functions
+#===================
+# Define Bohr constant and Pi
+PI=3.1415926535897932384
+AU=0.5291772083
+INPUT=$1
+
 function length() {
  local DUMMY=''
  local A=`echo $DUMMY |
@@ -52,7 +81,6 @@ VOL_AA=(`awk '/new unit-cell volume/{print $8 }' $INPUT`)
 ALAT=(`awk '/CELL_PARAMETERS/{print $3 }' $INPUT | sed 's/)//g'`)
 NOPT=${#ALAT[@]}
 CELL=(`awk '/CELL_PARAMETERS/{
-
   for (i=1;i<=3;i++) {
      getline;
      a1=$1;
@@ -82,8 +110,9 @@ declare -A LATTICEV
 for i in `seq 0 $(( ${NOPT} - 1 ))`; do
   LATTICELENGTH=()
   for j in `seq 0 2`; do
-    # FOR DEBUG
-    #printf "%s\t%s\t%s\n" ${CELL[$p]} ${CELL[$q]} ${CELL[$r]}
+    if [ ${DEBUG} = 'true' ]; then
+      printf "%s\t%s\t%s\n" ${CELL[$p]} ${CELL[$q]} ${CELL[$r]}
+    fi
     p=$(($i*9+3*$j))
     q=$(($i*9+3*${j}+1))
     r=$(($i*9+3*${j}+2))
@@ -129,10 +158,11 @@ for j in `seq 0 2`; do
 done
 echo
 
-# FOR DEBUG
-# for i in `seq 0 $(( ${NOPT} - 1 ))`; do
-#   echo "Atomic Positions for iter ${i}"
-#   for j in `seq 0 0`; do
-#     printf "%s\t%s\t%s\n" ${POS[$i*$j]} ${POS[$i*$j+1]} ${POS[$i*$j+2]}
-#   done
-# done
+if [ ${PRINT_POSITION} = 'true' ]; then
+  for i in `seq 0 $(( ${NOPT} - 1 ))`; do
+    echo "Atomic Positions for iter ${i}"
+    for j in `seq 0 0`; do
+      printf "%s\t%s\t%s\n" ${POS[${i}*9+3*${j}]} ${POS[${i}*9+3*${j}+1]} ${POS[${i}*9+3*${j}+2]}
+    done
+  done
+fi
