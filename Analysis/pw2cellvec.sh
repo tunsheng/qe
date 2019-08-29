@@ -59,6 +59,7 @@ CELL=(`awk '/CELL_PARAMETERS/{
      print $0, '\n';
   }
 }' $INPUT`)
+
 POS=(`awk '/ATOMIC_POSITIONS/{
   for (i=1;i<=1;i++) {
      getline;
@@ -82,11 +83,14 @@ for i in `seq 0 $(( ${NOPT} - 1 ))`; do
   LATTICELENGTH=()
   for j in `seq 0 2`; do
     # FOR DEBUG
-    # printf "%s\t%s\t%s\n" ${CELL[$i*$j]} ${CELL[$i*$j+1]} ${CELL[$i*$j+2]}
-    LATTICELENGTH+=(`length ${CELL[$i*$j]} ${CELL[$i*$j+1]} ${CELL[$i*$j+2]}`)
-    LATTICEV[$j,0]=${CELL[$i*$j]}
-    LATTICEV[$j,1]=${CELL[$i*$j+1]}
-    LATTICEV[$j,2]=${CELL[$i*$j+2]}
+    #printf "%s\t%s\t%s\n" ${CELL[$p]} ${CELL[$q]} ${CELL[$r]}
+    p=$(($i*9+3*$j))
+    q=$(($i*9+3*${j}+1))
+    r=$(($i*9+3*${j}+2))
+    LATTICELENGTH+=(`length ${CELL[${p}]} ${CELL[${q}]} ${CELL[${r}]}`)
+    LATTICEV[$j,0]=${CELL[${p}]}
+    LATTICEV[$j,1]=${CELL[${q}]}
+    LATTICEV[$j,2]=${CELL[${r}]}
   done
   V1=(${LATTICEV[0,0]} ${LATTICEV[0,1]} ${LATTICEV[0,2]})
   V2=(${LATTICEV[1,0]} ${LATTICEV[1,1]} ${LATTICEV[1,2]})
@@ -118,9 +122,9 @@ done
 echo "Final lattice vectors (angstrom)"
 k=$(( ${NOPT} - 1 ))
 for j in `seq 0 2`; do
-  A1=`echo ${DUMMY} | awk -v a="${CELL[$k*$j]}" -v au="${AU}" -v alat="${ALAT[$i]}" '//{print a*au*alat}'`
-  B1=`echo ${DUMMY} | awk -v a="${CELL[$k*$j+1]}" -v au="${AU}" -v alat="${ALAT[$i]}" '//{print a*au*alat}'`
-  C1=`echo ${DUMMY} | awk -v a="${CELL[$k*$j+2]}" -v au="${AU}" -v alat="${ALAT[$i]}" '//{print a*au*alat}'`
+  A1=`echo ${DUMMY} | awk -v a="${CELL[${k}*9+3*${j}]}" -v au="${AU}" -v alat="${ALAT[$i]}" '//{print a*au*alat}'`
+  B1=`echo ${DUMMY} | awk -v a="${CELL[${k}*9+3*${j}+1]}" -v au="${AU}" -v alat="${ALAT[$i]}" '//{print a*au*alat}'`
+  C1=`echo ${DUMMY} | awk -v a="${CELL[${k}*9+3*${j}+2]}" -v au="${AU}" -v alat="${ALAT[$i]}" '//{print a*au*alat}'`
   printf "\t%f\t %f\t %f\n" ${A1} ${B1} ${C1}
 done
 echo
