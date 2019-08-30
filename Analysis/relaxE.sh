@@ -1,10 +1,37 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-PLOT=true
-DAT=$SCRATCH/Backup_Copper/DampE4
-DAT2=$SCRATCH/Backup_Copper/DampE3
-DAT2=$SCRATCH/Copper/
-DAT1=$SCRATCH/Backup_Copper/Ion1
+if [ $# -eq 0 ]; then
+	echo "ERROR: try 'sh relaxE.sh --help' for more information"
+	exit
+fi
+
+while [ ! $# -eq 0 ]; do
+  case "$1" in
+    --help )
+      echo "Usage: sh relaxE.sh [OPTION]...\n"
+      exit
+      ;;
+    --input )
+      DAT=$2
+      DAT2=$3
+      ;;
+    --no-plot )
+      PLOT=false
+      ;;
+    * )
+      echo "ERROR: no matching options."
+      exit
+      ;;
+    esac
+  shift
+done
+
+PLOT="${PLOT:-true}"
+DAT="${DAT:-$SCRATCH/Backup_Copper/DampE4}"
+DAT2="${DAT2:-$SCRATCH/Backup_Copper/DampE3}"
+#DAT2=$SCRATCH/Copper/
+#DAT1=$SCRATCH/Backup_Copper/Ion1
+
 if [ ${PLOT} = 'true' ]; then
 gnuplot -persist <<-EOFMarker
   #set terminal postscript eps enhanced color

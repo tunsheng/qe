@@ -1,10 +1,62 @@
-#!/bin/bash
-PLOT=true
+#!/usr/bin/env bash
+
+if [ $# -eq 0 ]; then
+  echo "ERROR: try 'sh forces.sh --help' for more information"
+  exit
+fi
+
+while [ $# -eq 0 ]; do
+  case "$1" in
+    --help )
+      exit
+      ;;
+    --input )
+      INPUT1=$2
+      INPUT2=$3
+      ;;
+    --output )
+      OUTPUT1=$2
+      OUTPUT2=$3
+      ;;
+    --no-plot )
+      PLOT=false
+      ;;
+    --default )
+      ;;
+    * )
+      echo "ERROR: No matching option."
+      exit
+      ;;
+    esac
+    shift
+done
+
+INPUT1="${INPUT1:-cu_ion_relax1.o}"
+INPUT2="${INPUT2:-cu_ion_relax1.o}"
+OUTPUT1="${OUTPUT1:-FORCES1.dat}"
+OUTPUT2="${OUTPUT2:-FORCES2.dat}"
+PLOT="${PLOT:-true}"
+
+if [ -f ${INPUT1} ]; then
+  echo "ERROR: The 1st file '${INPUT1}' not found."
+  exit 1
+fi
+
+if [ ! -f ${INPUT2} ]; then
+  echo "ERROR: The 2d file '${INPUT2}' not found."
+  exit 1
+fi
+
+# EXAMPLE
 #INPUT1='../Output/cu_gram-schmidth.o'
-INPUT1='../Output/cu_edamping4.o'
-INPUT2='../cu_ion_relax1.o'
-OUTPUT1='FORCES1.dat'
-OUTPUT2='FORCES2.dat'
+#INPUT1='../Output/cu_edamping4.o'
+#INPUT2='../cu_ion_relax1.o'
+#OUTPUT1='FORCES1.dat'
+#OUTPUT2='FORCES2.dat'
+
+#=============
+# Main Script
+#=============
 
 NAT=`grep 'atoms =' $INPUT1 | awk '{print $5}'`
 

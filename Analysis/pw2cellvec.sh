@@ -5,12 +5,13 @@ export LANG=en_US.UTF-8
 #===================
 #   Flags
 #===================
-if [ -z ${INPUT} ]; then
-  echo "pw2cellvec: Requires an input file."
-  exit 1
+
+if [ $# -eq 0 ]; then
+  echo "ERROR: try 'sh pw2cellvec.sh --help' for more information"
+  exit
 fi
 
-while [ $# -eq 0 ]
+while [ ! $# -eq 0 ]
 do
   case "$1" in
     --help | -h)
@@ -27,6 +28,10 @@ do
       ;;
     --debug )
       DEBUG=true
+      ;;
+    --input )
+      INPUT=$2
+      ;;
     esac
     shift
 done
@@ -34,6 +39,15 @@ done
 PRINT_POSITION="${PRINT_POSITION:-false}"
 DEBUG="${DEBUG:-false}"
 
+if [ -z ${INPUT} ]; then
+  echo "pw2cellvec: Requires an input file."
+  exit 1
+fi
+
+if [ ! -f ${INPUT} ]; then
+  echo "ERROR: The file '${INPUT}' not found."
+  exit 1
+fi
 #===================
 #   Math functions
 #===================
