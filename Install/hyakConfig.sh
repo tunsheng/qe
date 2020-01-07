@@ -18,6 +18,8 @@ sed -i -e 's/SCALAPACK_LIBS =/SCALAPACK_LIBS       = -mkl/g' make.inc
 sed -i -e 's/FFT_LIBS       =/FFT_LIBS       = -mkl/g' make.inc
 sed -i -e 's/MPI_LIBS       =/MPI_LIBS       = -L\/gscratch\/sw\/intel-2019\/impi\/2019.0.117\/intel64\/lib\/ -lmpi/g' make.inc
 
+
+## Follow https://www.youtube.com/watch?v=doudMLEaq3w
 ## Follow https://www.youtube.com/watch?v=xvUuBT0iFSo
 # MPI (NOT WORKING)
 # sed -i -e 's/FFLAGS         = -O2 -assume byterecl -g -traceback -qopenmp/FFLAGS         = -O3 -assume byterecl -g -traceback -qopenmp/g' make.inc
